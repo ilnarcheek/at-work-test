@@ -16,11 +16,7 @@ const Overlay = styled.div<{ isOpen: boolean }>`
   top: 0;
   left: 0;
 
-  ${({ isOpen }) =>
-    !isOpen &&
-    `
-  display: none;
-    `}
+  display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
 `;
 
 const StyledModal = styled.div`
