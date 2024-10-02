@@ -1,18 +1,14 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import DotsDesktopDefault from "./../assets/DotsDesktopDefault.svg";
 import DotsDesktopHover from "./../assets/DotsDesktopHover.svg";
 import DotsDesktopTap from "./../assets/DotsDesktopTap.svg";
 import DotsMobileDefault from "./../assets/DotsMobileDefault.svg";
 import DotsMobileTap from "./../assets/DotsMobileTap.svg";
-import { useEffect, useState } from "react";
 
 const Button = styled.button`
-  padding: 0;
-  margin: 0;
-  border: none;
   width: 24px;
   height: 24px;
-  background: none;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,9 +16,10 @@ const Button = styled.button`
 
 interface DropdownButton {
   onClick: (e: React.MouseEvent) => void;
+  children: React.ReactNode;
 }
 
-export default function DropdownButton({ onClick }: DropdownButton) {
+export default function DropdownButton({ onClick, children }: DropdownButton) {
   const [isHovered, setIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -62,6 +59,7 @@ export default function DropdownButton({ onClick }: DropdownButton) {
       onMouseUp={() => setIsClicked(false)}
     >
       <img src={getCurrentIcon()} />
+      {children}
     </Button>
   );
 }

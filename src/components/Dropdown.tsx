@@ -9,20 +9,24 @@ const StyledDropdown = styled.div<{ isOpen: boolean }>`
   width: 20rem;
   padding: 0.8rem;
   border-radius: 1.2rem;
-  position: absolute;
   background-color: var(--white-color);
-  top: 5rem;
   box-shadow: 0 0.5rem 3rem #00000029;
   z-index: 2;
 
+  position: absolute;
+  top: 6rem;
+  right: 0;
+
   @media (max-width: 400px) {
-    top: 7rem;
+    width: 16rem;
+    top: 19rem;
   }
 `;
 
 const MenuList = styled.ul`
   display: flex;
   flex-direction: column;
+  align-items: start;
 `;
 
 const MenuItem = styled.li`

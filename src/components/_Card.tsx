@@ -1,6 +1,5 @@
+import { useEffect } from "react";
 import styled from "styled-components";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { closeDropdown, openDropdown } from "../store/slices/dropdownSlice";
 import { IUser } from "../types/IUser";
 import Dropdown from "./Dropdown";
 import DropdownButton from "./DropdownButton";
@@ -112,20 +111,39 @@ const City = styled.p<{ isArchive: boolean }>`
 interface CardProps {
   user: IUser;
   isArchive?: boolean;
+  activeDropdownId: number | null;
+  setActiveDropdownId: (id: number | null) => void;
 }
 
-export default function Card({ user, isArchive = false }: CardProps) {
-  const { activeDropdownId } = useAppSelector((state) => state.dropdown);
-  const dispatch = useAppDispatch();
+export default function Card({
+  user,
+  isArchive = false,
+  activeDropdownId,
+  setActiveDropdownId,
+}: CardProps) {
   const isDropdownOpen = activeDropdownId === user.id;
 
-  const toggleDropdown = () => {
-    if (isDropdownOpen) {
-      dispatch(closeDropdown());
-    } else {
-      dispatch(openDropdown(user.id));
-    }
+  const toggleDropdown = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    setActiveDropdownId(isDropdownOpen ? null : user.id);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest(`[data-dropdown="${user.id}"]`)) {
+        setActiveDropdownId(null);
+      }
+    };
+
+    if (isDropdownOpen) {
+      document.addEventListener("click", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [isDropdownOpen, setActiveDropdownId, user.id]);
 
   return (
     <StyledCard>
@@ -135,14 +153,13 @@ export default function Card({ user, isArchive = false }: CardProps) {
       <UserInfo>
         <CardHeader>
           <Name isArchive={isArchive}>{user.username}</Name>
-          <DropdownButton onClick={toggleDropdown}>
-            <Dropdown
-              isOpen={isDropdownOpen}
-              user={user}
-              isArchive={isArchive}
-              data-dropdown={user.id}
-            />
-          </DropdownButton>
+          <DropdownButton onClick={toggleDropdown} />
+          <Dropdown
+            isOpen={isDropdownOpen}
+            user={user}
+            isArchive={isArchive}
+            data-dropdown={user.id}
+          />
         </CardHeader>
         <CompanyName isArchive={isArchive}>{user.company.name}</CompanyName>
         <City isArchive={isArchive}>{user.address.city}</City>
