@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import Card from "./Card";
 import { IUser } from "../types/IUser";
-import { useState } from "react";
+import Card from "./Card";
 
 interface CardListProps {
   users: IUser[];
@@ -22,18 +21,11 @@ const StyledCardList = styled.ul`
 `;
 
 export default function CardList({ users, isArchive = false }: CardListProps) {
-  const [activeDropdownId, setActiveDropdownId] = useState<number | null>(null);
-
   return (
     <StyledCardList>
       {users.map((user) => (
         <li key={user.id}>
-          <Card
-            user={user}
-            isArchive={isArchive}
-            activeDropdownId={activeDropdownId}
-            setActiveDropdownId={setActiveDropdownId}
-          />
+          <Card user={user} isArchive={isArchive} />
         </li>
       ))}
     </StyledCardList>
